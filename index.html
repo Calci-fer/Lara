@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>For Lara</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Great+Vibes&display=swap");
+
+      :root {
+        --pink-1: #ff9bb3;
+        --pink-2: #ff7699;
+        --bg-1: #fff6f8;
+        --accent: rgba(255, 140, 161, 0.18);
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        font-family: "Poppins", sans-serif;
+        background: radial-gradient(
+            1200px 600px at 10% 10%,
+            #fff0f3 0%,
+            transparent 10%
+          ),
+          radial-gradient(1000px 500px at 90% 90%, #fff6ff 0%, transparent 12%),
+          var(--bg-1);
+        overflow-x: hidden;
+        color: #2b2b2b;
+        padding-bottom: 40px;
+      }
+
+      section {
+        display: none;
+        padding: 40px 20px;
+        min-height: calc(100vh - 40px);
+        position: relative;
+        align-items: center;
+        justify-content: center;
+      }
+      section.active {
+        display: flex;
+      }
+
+      .container {
+        max-width: 980px;
+        margin: 0 auto;
+        text-align: center;
+        padding: 40px;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.85),
+          rgba(255, 255, 255, 0.9)
+        );
+        border-radius: 26px;
+        box-shadow: 0 20px 50px rgba(20, 20, 20, 0.06);
+        position: relative;
+        overflow: hidden;
+      }
+
+      h1 {
+        font-weight: 700;
+        font-size: 48px;
+      }
+      h2 {
+        font-family: "Great Vibes", cursive;
+        font-size: 44px;
+        color: #ff6f93;
+        margin-bottom: 8px;
+      }
+      p {
+        font-size: 1.05rem;
+        line-height: 1.7;
+        color: #444;
+      }
+
+      .btn {
+        padding: 12px 30px;
+        border: none;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--pink-1), var(--pink-2));
+        color: #fff;
+        font-size: 17px;
+        cursor: pointer;
+        margin-top: 26px;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+        box-shadow: 0 10px 30px rgba(255, 118, 153, 0.18);
+      }
+
+      .floating-shape {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(6px);
+        opacity: 0.9;
+      }
+      @keyframes float {
+        from {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-22px);
+        }
+        to {
+          transform: translateY(0);
+        }
+      }
+
+      .card-wrap {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 18px;
+        margin-top: 26px;
+      }
+      .card {
+        background: linear-gradient(180deg, #ffffff, #fffafc);
+        border-radius: 18px;
+        padding: 20px;
+        box-shadow: 0 12px 30px rgba(20, 20, 20, 0.06);
+        opacity: 1;
+        transition: transform 0.28s ease, box-shadow 0.2s ease;
+      }
+      .card h3 {
+        margin-top: 8px;
+        color: #ff6f93;
+      }
+      .card:hover {
+        transform: translateY(-4px) scale(1.02);
+        box-shadow: 0 18px 40px rgba(20, 20, 20, 0.09);
+      }
+
+      .emoji-icon {
+        font-size: 48px;
+        margin-bottom: 10px;
+        display: block;
+      }
+
+      .heart {
+        position: fixed;
+        pointer-events: none;
+        font-size: 20px;
+        transform: translate(-50%, -50%) scale(0.9);
+        will-change: transform, opacity;
+      }
+
+      .progress-dots {
+        position: fixed;
+        left: 24px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .progress-dots button {
+        width: 12px;
+        height: 12px;
+        border-radius: 99px;
+        border: none;
+        background: rgba(0, 0, 0, 0.12);
+        cursor: pointer;
+      }
+      .progress-dots button.active {
+        background: var(--pink-2);
+        transform: scale(1.18);
+      }
+
+      /* Custom audio player styling */
+      .player-container {
+        margin-top: 30px;
+        padding: 24px;
+        background: linear-gradient(135deg, #fff0f3, #fffbfc);
+        border-radius: 20px;
+        box-shadow: 0 12px 30px rgba(255, 118, 153, 0.15);
+        border: 2px solid rgba(255, 155, 179, 0.2);
+      }
+      audio {
+        width: 100%;
+        height: 50px;
+      }
+      audio::-webkit-media-controls-panel {
+        background: linear-gradient(
+          90deg,
+          rgba(255, 118, 153, 0.08),
+          rgba(255, 155, 179, 0.08)
+        );
+        border-radius: 12px;
+      }
+      audio::-webkit-media-controls-play-button {
+        width: 40px;
+        height: 40px;
+      }
+      audio::-moz-media-controls-panel {
+        background: linear-gradient(
+          90deg,
+          rgba(255, 118, 153, 0.08),
+          rgba(255, 155, 179, 0.08)
+        );
+      }
+
+      @media (max-width: 640px) {
+        h1 {
+          font-size: 34px;
+        }
+        h2 {
+          font-size: 34px;
+        }
+      }
+
+      /* Floating Hearts Background */
+      .float-hearts {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: -1;
+        pointer-events: none;
+      }
+
+      .fh {
+        position: absolute;
+        font-size: 32px;
+        opacity: 0.75;
+        animation: floatHearts 10s infinite ease-in-out;
+      }
+
+      .fh1 {
+        top: 80%;
+        left: 10%;
+        animation-duration: 13s;
+      }
+      .fh2 {
+        top: 85%;
+        left: 25%;
+        animation-duration: 11s;
+      }
+      .fh3 {
+        top: 78%;
+        left: 45%;
+        animation-duration: 12s;
+      }
+      .fh4 {
+        top: 82%;
+        left: 65%;
+        animation-duration: 15s;
+      }
+      .fh5 {
+        top: 88%;
+        left: 80%;
+        animation-duration: 10s;
+      }
+      .fh6 {
+        top: 90%;
+        left: 55%;
+        animation-duration: 16s;
+      }
+
+      @keyframes floatHearts {
+        0% {
+          transform: translateY(0) scale(1);
+          opacity: 0.6;
+        }
+        50% {
+          transform: translateY(-260px) scale(1.35);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-480px) scale(1);
+          opacity: 0;
+        }
+      }
+
+      /* New album cover player */
+.album-player-new {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 360px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+      .album-cover-new {
+        width: 260px;
+        height: 260px;
+        margin: 0 auto;
+        border-radius: 20px;
+        overflow: hidden;
+        position: relative;
+        cursor: pointer;
+        box-shadow: 0 12px 35px rgba(255, 118, 153, 0.2);
+        transition: transform 0.4s ease;
+      }
+
+      .album-cover-new img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+        justify-content: center !important;
+        justify-items: center !important;
+        vertical-align: middle !important;
+      }
+
+      #song .container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* vertical centering */
+  align-items: center;     /* horizontal centering */
+}
+
+      /* Zoom effect while playing */
+      .album-cover-new.playing img {
+        transform: scale(1.09);
+      }
+
+      /* Play & Pause Icons */
+      .play-button,
+      .pause-button {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 54px;
+        color: white;
+        text-shadow: 0 0 18px rgba(0, 0, 0, 0.55);
+        opacity: 0;
+        transition: opacity 0.35s ease;
+        pointer-events: none;
+      }
+
+      /* show icon when hovered */
+.play-button, .pause-button{
+  opacity: 0.85; /* Always visible */
+  transition: opacity .35s ease;
+}
+
+.album-cover-new:hover .play-button,
+.album-cover-new:hover .pause-button{
+  opacity: 1; /* Slightly brighter on hover */
+}
+
+      .track-info {
+        margin-top: 16px;
+        font-weight: 600;
+        color: #ff6f93;
+      }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  </head>
+  <body>
+    <div class="float-hearts">
+      <div class="fh fh1">💗</div>
+      <div class="fh fh2">💕</div>
+      <div class="fh fh3">💖</div>
+      <div class="fh fh4">💞</div>
+      <div class="fh fh5">💓</div>
+      <div class="fh fh6">💘</div>
+    </div>
+
+    <div class="progress-dots">
+      <button data-to="opening" class="active"></button>
+      <button data-to="intro"></button>
+      <button data-to="reasons"></button>
+      <button data-to="song"></button>
+      <button data-to="ending"></button>
+    </div>
+
+    <section id="opening" class="active">
+      <div class="container">
+        <h1>Hello, Lara.</h1>
+        <h2>for you</h2>
+        <p>
+          This isn’t just a webpage. It’s a small story—my story—crafted for
+          you.
+        </p>
+        <button class="btn" onclick="goTo('intro')">Begin the Story</button>
+      </div>
+    </section>
+
+    <section id="intro">
+      <div class="container">
+        <h2>Once Upon a Feeling...</h2>
+        <p>I’ve wanted to tell you something—not suddenly, but honestly.</p>
+        <button class="btn" onclick="goTo('reasons')">Continue</button>
+      </div>
+    </section>
+
+    <section id="reasons">
+      <div class="container" style="padding-bottom: 60px">
+        <h2>Six Things About You</h2>
+
+        <div
+          class="card-wrap"
+          style="
+            justify-content: center;
+            text-align: center;
+            vertical-align: middle;
+          "
+        >
+          <div class="card">
+            <div class="emoji-icon">🌟</div>
+            <h3>OA Vibes</h3>
+            <p>
+              You have that fun, expressive energy that makes moments twice as
+              lively.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="emoji-icon">💖</div>
+            <h3>You're Beautiful</h3>
+            <p>
+              Your looks catch attention, but it's your softness that keeps it.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="emoji-icon">🔥</div>
+            <h3>Hardworking</h3>
+            <p>
+              You push through things even when you’re tired—something I really
+              admire.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="emoji-icon">🧠</div>
+            <h3>Smart</h3>
+            <p>
+              You think fast, decide well, and handle things with a calm kind of
+              confidence.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="emoji-icon">🌸</div>
+            <h3>Lovely</h3>
+            <p>
+              Everything about you—your attitude, your gentleness—feels
+              naturally warm.
+            </p>
+          </div>
+
+          <div class="card">
+            <div class="emoji-icon">😂</div>
+            <h3>Jolly</h3>
+            <p>
+              You brighten the room without even trying, and honestly, it’s
+              contagious.
+            </p>
+          </div>
+
+          <button class="btn" onclick="goTo('song')">Next</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="song" >
+      <div class="container">
+        <h2>Before the Ending...</h2>
+        <p style="margin-bottom: 20px">
+          This song is actually my favorite; it may be old, but the feeling it
+          evokes never gets old.✨
+        </p>
+
+        <div class="album-player-new" style="
+            justify-content: center;
+            text-align: center;
+            vertical-align: middle;
+          ">
+          <div class="album-cover-new" style="
+            justify-content: center;
+            text-align: center;
+            vertical-align: middle;
+          " onclick="toggleMusic()">
+            <img src="esp.png" alt="Album" />
+
+            <!-- play/pause overlay icon -->
+            <div class="play-button" id="playIcon">▶</div>
+            <div class="pause-button" id="pauseIcon">❚❚</div>
+          </div>
+
+          <audio id="audioTrack" autoplay>
+            <source src="especiallyforyou.mp3" type="audio/mpeg" />
+          </audio>
+
+          <p class="track-info">Especially For You</p>
+        </div>
+
+        <button class="btn" onclick="goTo('ending')">Final Page</button>
+      </div>
+    </section>
+
+    <section id="ending">
+      <div class="container">
+        <h2>So Here’s the Truth</h2>
+        <p style="font-size: 1.25rem; text-align: justify">
+          I genuinely appreciate who you are as a person. I'm not sure when it
+          started or why this feeling grew within me, but I want you to know
+          that you are incredibly valued and appreciated. I may not be the
+          person you are looking for, but I am grateful for the opportunity to
+          express these feelings for you without hesitation or awkwardness.
+          <br /><br />
+          I want you to know that whatever decision you make regarding us, I
+          will gladly accept it because I believe that everything happens for a
+          reason. No matter what happens, I wish you the best and lots of love,
+          as that is what you truly deserve. Thank you for being you and for
+          inspiring me just by existing. God bless you and your family!
+        </p>
+      </div>
+    </section>
+
+    <script>
+      function setActiveDot(page) {
+        document
+          .querySelectorAll(".progress-dots button")
+          .forEach((b) => b.classList.toggle("active", b.dataset.to === page));
+      }
+
+      function goTo(page) {
+        const current = document.querySelector("section.active");
+        const next = document.getElementById(page);
+        if (!next || current === next) return;
+
+        gsap.to(current.querySelector(".container"), {
+          opacity: 0,
+          y: -20,
+          duration: 0.38,
+          ease: "power2.in",
+          onComplete() {
+            current.classList.remove("active");
+            next.classList.add("active");
+            setActiveDot(page);
+            gsap.fromTo(
+              next.querySelector(".container"),
+              { y: 30, opacity: 0 },
+              { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" }
+            );
+            if (page === "reasons") {
+              const cards = next.querySelectorAll(".card");
+              cards.forEach((c, i) =>
+                gsap.fromTo(
+                  c,
+                  { y: 24, opacity: 0 },
+                  {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.7,
+                    delay: i * 0.12,
+                    ease: "back.out(0.6)",
+                  }
+                )
+              );
+            }
+          },
+        });
+      }
+
+      function burstHearts(x, y, count) {
+        for (let i = 0; i < count; i++) {
+          const heart = document.createElement("div");
+          heart.className = "heart";
+          heart.style.left = x + "px";
+          heart.style.top = y + "px";
+          heart.style.opacity = "1";
+          heart.style.fontSize = 12 + Math.floor(Math.random() * 18) + "px";
+          heart.innerText = ["💗", "💞", "💕", "💓"][
+            Math.floor(Math.random() * 4)
+          ];
+          document.body.appendChild(heart);
+
+          const angle = Math.random() * Math.PI * 2;
+          const dist = 60 + Math.random() * 80;
+          // animate outward then slowly float up while staying visible longer
+          gsap
+            .timeline({
+              onComplete: () => {
+                // small drift up and fade slower
+                gsap.to(heart, {
+                  y: "-=40",
+                  opacity: 0,
+                  duration: 1.2,
+                  ease: "power1.out",
+                  delay: 0.25,
+                  onComplete: () => heart.remove(),
+                });
+              },
+            })
+            .to(heart, {
+              x: Math.cos(angle) * dist,
+              y: Math.sin(angle) * dist - 20,
+              scale: 1.15 + Math.random() * 0.4,
+              duration: 0.9 + Math.random() * 0.6,
+              ease: "power2.out",
+            });
+        }
+      }
+
+      // click-to-like hearts but ignore clicks on controls
+      document.addEventListener("click", (e) => {
+        if (
+          e.target.closest(".btn") ||
+          e.target.closest("audio") ||
+          e.target.closest("button[data-to]")
+        )
+          return;
+        burstHearts(e.clientX, e.clientY, 6);
+      });
+
+      window.addEventListener("load", () => {
+        const c = document.querySelector("#opening .container");
+        gsap.fromTo(
+          c,
+          { y: 30, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.9, ease: "power3.out" }
+        );
+        // prepare reasons cards if already visible
+        const reasons = document.getElementById("reasons");
+        if (reasons && reasons.classList.contains("active")) {
+          const cards = reasons.querySelectorAll(".card");
+          cards.forEach((c, i) =>
+            gsap.fromTo(
+              c,
+              { y: 24, opacity: 0 },
+              {
+                y: 0,
+                opacity: 1,
+                duration: 0.7,
+                delay: i * 0.12,
+                ease: "back.out(0.6)",
+              }
+            )
+          );
+        }
+      });
+    </script>
+    <script>
+  const audio = document.getElementById("audioTrack");
+  const playIcon = document.getElementById("playIcon");
+  const pauseIcon = document.getElementById("pauseIcon");
+  const cover = document.querySelector(".album-cover-new");
+
+  pauseIcon.style.display = "none";
+
+  function toggleMusic(){
+    if(audio.paused){
+      audio.play();
+      playIcon.style.display = "none";
+      pauseIcon.style.display = "block";
+      cover.classList.add("playing");
+    } else {
+      audio.pause();
+      playIcon.style.display = "block";
+      pauseIcon.style.display = "none";
+      cover.classList.remove("playing");
+    }
+  }
+
+  audio.addEventListener("play", ()=>{
+    playIcon.style.display = "none";
+    pauseIcon.style.display = "block";
+    cover.classList.add("playing");
+  });
+
+  audio.addEventListener("pause", ()=>{
+    playIcon.style.display = "block";
+    pauseIcon.style.display = "none";
+    cover.classList.remove("playing");
+  });
+</script>
+
+  </body>
+</html>
